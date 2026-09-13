@@ -105,13 +105,13 @@ Informasi ini dapat digunakan sebagai data pendukung untuk mengetahui karakteris
 
 ## 6. Diskusi dan Interpretasi
 
-### Gejala Khas Serangan SYN Flood Berdasarkan Hasil Capture
+### - Gejala Khas Serangan SYN Flood Berdasarkan Hasil Capture
 
 Berdasarkan hasil capture, terdapat beberapa karakteristik yang menunjukkan adanya serangan TCP SYN Flood. Pertama, terlihat peningkatan jumlah paket TCP secara tiba-tiba dengan puncak sekitar 28.000 paket per detik pada I/O Graph. Kedua, paket yang diterima memiliki flag SYN aktif dengan nilai Seq=0, Win=64, dan Len=120 yang relatif seragam. Keseragaman tersebut menunjukkan bahwa paket dihasilkan secara otomatis menggunakan tool.
 
 Selain itu, alamat IP sumber terlihat berubah-ubah secara acak sehingga tidak terdapat satu sumber IP yang dominan. Dominasi protokol TCP yang mencapai hampir seluruh trafik juga menjadi anomali dibandingkan kondisi jaringan normal. Kombinasi karakteristik tersebut menjadi indikator kuat adanya aktivitas SYN Flood.
 
-### Mengapa Jumlah SYN-ACK Tetap Nol Meskipun SYN Sangat Banyak
+### - Mengapa Jumlah SYN-ACK Tetap Nol Meskipun SYN Sangat Banyak
 
 Berdasarkan filter `tcp.flags.syn == 1 and tcp.flags.ack == 1`, tidak ditemukan paket SYN-ACK pada hasil capture. Kondisi ini berkaitan dengan penggunaan parameter `--rand-source` yang membuat paket SYN menggunakan alamat IP sumber secara acak atau spoofed.
 
@@ -119,7 +119,7 @@ Ketika target menerima paket SYN, target akan mengirimkan SYN-ACK menuju alamat 
 
 Target kemudian tetap mempertahankan koneksi dalam kondisi half-open sambil menunggu ACK. Apabila jumlah koneksi yang belum selesai terus bertambah, kapasitas antrian koneksi dapat semakin terbebani dan pada akhirnya menghabiskan resource yang tersedia.
 
-### Dampak IP Spoofing Terhadap Deteksi dan Mitigasi
+### - Dampak IP Spoofing Terhadap Deteksi dan Mitigasi
 
 Penggunaan IP spoofing melalui parameter `--rand-source` membuat proses identifikasi sumber serangan menjadi lebih sulit. Setiap paket dapat memiliki alamat IP sumber yang berbeda sehingga administrator tidak dapat dengan mudah menentukan satu alamat IP sebagai sumber utama serangan.
 
@@ -129,7 +129,7 @@ Kondisi tersebut juga membuat metode mitigasi yang hanya mengandalkan pemblokira
 
 ## 7. Refleksi dan Perlindungan
 
-### Refleksi
+### - Refleksi
 
 Praktikum ini memberikan pemahaman secara langsung mengenai mekanisme TCP SYN Flood dan dampaknya terhadap ketersediaan layanan jaringan. Serangan memanfaatkan proses three-way handshake TCP dengan mengirimkan sejumlah besar permintaan SYN yang menyebabkan target harus menangani banyak koneksi yang belum selesai.
 
@@ -137,7 +137,7 @@ Penggunaan IP spoofing semakin mempersulit proses identifikasi sumber serangan. 
 
 Hasil tersebut menunjukkan bahwa analisis paket dan pola trafik dapat membantu mengidentifikasi karakteristik serangan SYN Flood pada jaringan.
 
-### Teknik Mitigasi
+### - Teknik Mitigasi
 
 Beberapa teknik yang dapat digunakan untuk mengurangi dampak serangan TCP SYN Flood antara lain:
 
@@ -156,7 +156,7 @@ Beberapa teknik yang dapat digunakan untuk mengurangi dampak serangan TCP SYN Fl
 5. **Upstream Filtering dan Anycast**  
    Upstream filtering dan Anycast dapat digunakan untuk menangani serangan pada tingkat infrastruktur jaringan yang lebih luas. Trafik berbahaya dapat disaring atau didistribusikan sebelum mencapai server utama. Pendekatan seperti ini umumnya digunakan untuk menghadapi serangan dengan volume besar yang sulit ditangani hanya menggunakan mekanisme mitigasi pada host.
 
-## Kesimpulan
+## 8. Kesimpulan
 
 Praktikum ini berhasil menunjukkan mekanisme TCP SYN Flood menggunakan `hping3` pada lingkungan virtualisasi yang terkontrol. Serangan menghasilkan trafik SYN dalam jumlah sangat besar dengan alamat IP sumber yang berubah-ubah, sehingga target menerima banyak permintaan koneksi yang tidak menyelesaikan proses three-way handshake.
 
